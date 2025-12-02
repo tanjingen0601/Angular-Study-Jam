@@ -1,0 +1,133 @@
+Download VS code:
+https://code.visualstudio.com/download
+
+
+In cmd:
+npm install -g @angular/cli
+ng v
+
+If cannot run ng v:
+Add path to env (in Users: AppData\Roaming\npm)
+
+In cmd:
+ng new todoapp
+cd todoapp
+code .
+
+In vs code:
+ng serve
+ng g c todolist
+
+
+todolist.ts
+
+import { NgForm, FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common';
+
+imports: [
+    CommonModule, 
+    FormsModule 
+  ],
+
+taskArray = [{ taskName: 'Brush teeth', isCompleted: false }];
+
+  onSubmit(form: NgForm) {
+    console.log(form);
+    this.taskArray.push({
+      taskName: form.controls['task'].value,
+      isCompleted: false
+    })
+    form.reset();
+  }
+
+  onDelete(index: number) {
+    console.log(index);
+    this.taskArray.splice(index, 1);
+  }
+
+  onCheck(index: number) {
+    console.log(this.taskArray);
+    this.taskArray[index].isCompleted = !this.taskArray[index].isCompleted;
+  }
+
+
+todolist.css
+
+h1 {
+    text-align: center;
+    font-size: 2rem;
+}
+
+#submitButton {
+    margin-top: 20px;
+}
+
+#myCheckbox {
+    margin-left: 30px;
+}
+
+
+todolist.html
+
+<div class="container">
+
+    <h1>To-Do Application</h1>
+    <hr>
+    <form (ngSubmit)="onSubmit(taskForm)" #taskForm="ngForm">
+        <div class="form-group">
+            <label for="task">Task</label>
+            <input type="text" class="form-control" id="task" placeholder="Enter task" ngModel name="task" required>
+            <small *ngIf="taskForm.invalid && taskForm.dirty" id="errorMessage" class="form-text text-danger">
+                Required field</small>
+        </div>
+
+        <button [disabled]="taskForm.invalid" id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <hr>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Task</th>
+                <th scope="col">Completed</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let t of taskArray; index as i">
+                <td>{{t.taskName}}</td>
+                <td><input (change)="onCheck(i)" id="myCheckbox" type="checkbox"></td>
+                <td><button class="btn btn-danger btn-sm" (click)="onDelete(i)">Delete</button></td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+app.html
+<app-todolist></app-todolist>
+
+
+app.ts
+import { Todolist } from './todolist/todolist';
+
+imports: [RouterOutlet, Todolist],
+
+
+npm install bootstrap
+
+
+angular.json
+"styles": [
+  "src/styles.css",
+  "node_modules/bootstrap/dist/css/bootstrap.min.css"
+],
+
+
+styles.css
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+Angular CLI reference
+https://www.digitalocean.com/community/tutorials/angular-angular-cli-reference 
