@@ -1,0 +1,7 @@
+https://nodejs.org/en/download
+Search nodejs, open file location, copy path
+Open env, add path to env
+
+In cmd:
+node -v
+npm -v
