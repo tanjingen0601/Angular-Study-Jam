@@ -105,24 +105,23 @@ todolist.html
 </div>
 
 
-app.html
-<app-todolist></app-todolist>
-
-
 app.ts
 import { Todolist } from './todolist/todolist';
 
 imports: [RouterOutlet, Todolist],
 
 
+
+app.html
+<app-todolist></app-todolist>
+
+
 npm install bootstrap
 
 
 angular.json
-"styles": [
-  "src/styles.css",
-  "node_modules/bootstrap/dist/css/bootstrap.min.css"
-],
+"node_modules/bootstrap/dist/css/bootstrap.min.css"
+(rmb to add comma)
 
 
 styles.css

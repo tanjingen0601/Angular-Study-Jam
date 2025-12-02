@@ -1,0 +1,86 @@
+https://console.firebase.google.com/
+Install firebase
+npm install -g firebase @angular/fire
+Create a new Firebase project
+angular-todo-app
+Web icon
+TodoWeb
+
+Build
+Firestore Database
+Create database
+
+Change Firestore Rules
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+
+ng add @angular/fire
+
+
+app.config.ts
+remove projectnumber & version
+
+todolist.ts
+
+import { Component, inject } from '@angular/core';
+
+import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+
+export class Todolist {
+  private firestore: Firestore = inject(Firestore); 
+  
+  tasks$: Observable<any[]>; 
+
+  constructor() {
+    const aCollection = collection(this.firestore, 'tasks');
+    this.tasks$ = collectionData(aCollection, { idField: 'id' }); 
+  }
+
+  onSubmit(form: NgForm) {
+    const aCollection = collection(this.firestore, 'tasks');
+    
+    addDoc(aCollection, {
+      taskName: form.controls['task'].value,
+      isCompleted: false
+    });
+
+    form.reset();
+  }
+
+  onDelete(id: string) {
+    const docRef = doc(this.firestore, 'tasks', id);
+    deleteDoc(docRef);
+  }
+
+  onCheck(id: string, currentStatus: boolean) {
+    const docRef = doc(this.firestore, 'tasks', id);
+    updateDoc(docRef, { isCompleted: !currentStatus });
+  }
+}
+
+
+todolist.html
+
+<tbody>
+    <tr *ngFor="let t of tasks$ | async">
+        <td>{{ t.taskName }}</td>
+        <td>
+            <input 
+                (change)="onCheck(t.id, t.isCompleted)" 
+                [checked]="t.isCompleted" 
+                type="checkbox">
+        </td>
+        <td>
+            <button class="btn btn-danger btn-sm" (click)="onDelete(t.id)">Delete</button>
+        </td>
+    </tr>
+</tbody>
