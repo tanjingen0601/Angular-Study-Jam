@@ -1,4 +1,5 @@
 https://nodejs.org/en/download
+v22.21.1 (LTS)
 Search nodejs, open file location, copy path
 Open env, add path to env
 
