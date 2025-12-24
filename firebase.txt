@@ -1,15 +1,9 @@
 https://console.firebase.google.com/
 Install firebase
+//run this in terminal
+npm install firebase@12 @angular/fire@20.0.1
 
-Installs the core Firebase JavaScript SDK (firebase) with the version constraint ^12.6.0.
-npm install firebase@^12.6.0
-
-Installs the official AngularFire library (@angular/fire).
-npm install @angular/fire --save
-
-Update firebase tools
-npm install -g firebase-tools
-
+In Firebase Console
 Create a new Firebase project
 angular-todo-app
 Web icon
@@ -31,19 +25,27 @@ service cloud.firestore {
 }
 
 
-ng add @angular/fire
-
-
 app.config.ts
-remove projectnumber & version
+// Firebase Imports
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+
+//copy your firebase config and paste after import and before export
+
+//add this after provideRouter(routes)
+provideFirebaseApp(() => initializeApp(firebaseConfig)),
+provideFirestore(() => getFirestore())
+
 
 todolist.ts
-
+//copy this line and replace the first line of import
 import { Component, inject } from '@angular/core';
 
+//copy this part and paste into the beginning import part
 import { Firestore, collection, addDoc, collectionData, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
+//copy this and replace the export part
 export class Todolist {
   private firestore: Firestore = inject(Firestore); 
   
@@ -78,7 +80,7 @@ export class Todolist {
 
 
 todolist.html
-
+//copy this part and REPLACE ONLY BODY PART
 <tbody>
     <tr *ngFor="let t of tasks$ | async">
         <td>{{ t.taskName }}</td>
@@ -93,35 +95,3 @@ todolist.html
         </td>
     </tr>
 </tbody>
-
-
-
-***Fix error
-
-"Firebase: No Firebase App '[DEFAULT]' has been created - call Firebase App.initializeApp()"
-
-Why This Happens (The Race Condition)
-Angular applications rely heavily on Dependency Injection.
-When your app boots up, Angular immediately starts creating your Services and Components.
-If a Service tries to talk to Firebase the moment it is created, but the initializeApp() function hasn't finished running yet, the app crashes.
-
-Solution: Use the Angular APP_INITIALIZER token to run a function that guarantees the Firebase app is initialized before the main App starts. 
-
-app.config.ts
-
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, APP_INITIALIZER } from '@angular/core';
-
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    {
-      provide: APP_INITIALIZER,
-      useValue: () => initializeApp(firebaseConfig),
-      multi: true
-    },
-    provideFirebaseApp(() => getApp()), 
-    provideFirestore(() => getFirestore())
-  ]
-};

@@ -3,11 +3,10 @@ https://code.visualstudio.com/download
 
 
 In cmd:
-npm install -g @angular/cli
-ng v
-
-If cannot run ng v:
-Add path to env (in Users: AppData\Roaming\npm)
+npm uninstall -g @angular/cli
+npm cache clean --force
+npm install -g @angular/cli@20.0.0
+ng version
 
 In cmd:
 ng new todoapp
@@ -20,15 +19,17 @@ ng g c todolist
 
 
 todolist.ts
-
+//copy this part and paste into the beginning import part
 import { NgForm, FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
 
+//copy this part and replace the original import part
 imports: [
     CommonModule, 
     FormsModule 
   ],
 
+//copy this part and paste in the export part
 taskArray = [{ taskName: 'Brush teeth', isCompleted: false }];
 
   onSubmit(form: NgForm) {
@@ -106,8 +107,10 @@ todolist.html
 
 
 app.ts
+//copy this part and paste into the beginning import part
 import { Todolist } from './todolist/todolist';
 
+//copy this part and replace the original import part
 imports: [RouterOutlet, Todolist],
 
 
@@ -115,13 +118,14 @@ imports: [RouterOutlet, Todolist],
 app.html
 <app-todolist></app-todolist>
 
-
+//run in terminal
 npm install bootstrap
 
 
 angular.json
+//copy this line, search styles in angular.json, add this after the default styles
+//remember to add comma before pasting this
 "node_modules/bootstrap/dist/css/bootstrap.min.css"
-(rmb to add comma)
 
 
 styles.css
